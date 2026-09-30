@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://23g0b5i2wj3a"]
+
+[ext_resource type="PackedScene" uid="uid://bfk8mmwwnrfu6" path="res://scenes/player.tscn" id="1_d7po0"]
+[ext_resource type="PackedScene" uid="uid://bcnr2aqajleyh" path="res://scenes/wall-long.tscn" id="2_qtlar"]
+[ext_resource type="PackedScene" uid="uid://dl3bnthxb7qhr" path="res://scenes/wall-short.tscn" id="3_rk7hg"]
+
+[node name="house" type="Node2D" unique_id=1804802909]
+
+[node name="Player" parent="." unique_id=1590016079 instance=ExtResource("1_d7po0")]
+position = Vector2(576, 324)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=355679094]
+position = Vector2(576, 324)
+
+[node name="room 1" type="Node2D" parent="." unique_id=1571922469]
+
+[node name="wall - long" parent="room 1" unique_id=300052247 instance=ExtResource("2_qtlar")]
+position = Vector2(576, 5)
+
+[node name="wall - long2" parent="room 1" unique_id=727578784 instance=ExtResource("2_qtlar")]
+position = Vector2(340, 214)
+scale = Vector2(0.14821696, 17.434246)
+
+[node name="wall - short" parent="room 1" unique_id=27762329 instance=ExtResource("3_rk7hg")]
+position = Vector2(5, 324)
+
+[node name="wall - short2" parent="room 1" unique_id=1501889039 instance=ExtResource("3_rk7hg")]
+position = Vector2(1147, 324)
