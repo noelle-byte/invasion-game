@@ -3,7 +3,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d7po0"]
 size = Vector2(1152, 10)
 
-[node name="wall - long" type="StaticBody2D" unique_id=300052247]
+[node name="wall" type="StaticBody2D" unique_id=300052247]
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1337592586]
 polygon = PackedVector2Array(-576, 5, -576, -5, 576, -5, 576, 5)

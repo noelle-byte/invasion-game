@@ -1,43 +1,29 @@
 extends CharacterBody2D
 
-@onready var camera: Camera2D = $"../house/Camera2D"
-# rename the camera to make my life easier
+# Controls how quickly the player moves
+@export var speed: float = 300.0
 
-@export var speed = 300.0
-var can_move := true # conditions to take control away if the player dies or something
-var failed := false 
+# Allows other systems to disable player movement when needed
+var can_move := true
 
 
 func _physics_process(_delta: float) -> void:
-	if not can_move: # force stop the player if they should not be able to move
+	# Stop all movement if control has been disabled
+	if not can_move:
 		velocity = Vector2.ZERO
 		return
 
+	# Combine the four movement inputs into one direction vector
+	# Input.get_vector also prevents diagonal movement being faster
 	var direction := Input.get_vector(
 		"ui_left",
 		"ui_right",
 		"ui_up",
 		"ui_down"
 	)
-	velocity = (direction * speed)
 
+	# Convert the input direction into the player's velocity
+	velocity = direction * speed
+
+	# Move the CharacterBody2D while respecting collisions
 	move_and_slide()
-
-	_check_rock_collisions()
-
-	if failed:
-		return
-
-
-func _check_rock_collisions() -> void:
-	var screen_height := get_viewport_rect().size.y
-
-	for i in range(get_slide_collision_count()):
-		var collision := get_slide_collision(i)
-		var collider := collision.get_collider()
-
-		if collider == null:
-			continue
-
-		if not collider.is_in_group("obstacle"):
-			continue

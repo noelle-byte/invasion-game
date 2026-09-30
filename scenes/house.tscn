@@ -1,8 +1,18 @@
 [gd_scene format=3 uid="uid://23g0b5i2wj3a"]
 
 [ext_resource type="PackedScene" uid="uid://bfk8mmwwnrfu6" path="res://scenes/player.tscn" id="1_d7po0"]
-[ext_resource type="PackedScene" uid="uid://bcnr2aqajleyh" path="res://scenes/wall-long.tscn" id="2_qtlar"]
-[ext_resource type="PackedScene" uid="uid://dl3bnthxb7qhr" path="res://scenes/wall-short.tscn" id="3_rk7hg"]
+[ext_resource type="PackedScene" uid="uid://bcnr2aqajleyh" path="res://scenes/wall.tscn" id="2_qtlar"]
+[ext_resource type="Script" uid="uid://cwauj4pnwa175" path="res://scripts/grid_camera.gd" id="2_se78b"]
+[ext_resource type="Script" uid="uid://cr0kgi5v154pm" path="res://scripts/enemy.gd" id="4_se78b"]
+[ext_resource type="Texture2D" uid="uid://bhnayd87opeef" path="res://assets/icon.svg" id="5_3bgk5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
+size = Vector2(78, 82)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_vesw4"]
+vertices = PackedVector2Array(471, 657.40625, 681, 657.0078, 963.4297, 686.4297, 870.10156, 868.52344, 574.4297, 949.5078, 360.02344, 871.28125, 294.46875, 668.1875, 2281.1328, 22.96875, 2283.8594, 220, 1657, 220, 1170, 20.023438, 471, 628, 681, 628, 1508, 220, 1170, 220, 1508, 250, 1657, 250, 1623, 398, 2284, 250, 2284, 398, 1766, 398, 1766, 428, 2284, 428, 2284, 628, 1170, 628, 1170, 428, 1623, 428, 1134, 398, 1134, 250, 1134, 628, 20, 628, 20, 20, 1134, 20)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4, 5, 6), PackedInt32Array(7, 8, 9, 10), PackedInt32Array(1, 0, 11, 12), PackedInt32Array(13, 14, 10), PackedInt32Array(13, 10, 9), PackedInt32Array(15, 13, 9, 16, 17), PackedInt32Array(16, 18, 19, 20), PackedInt32Array(21, 22, 23, 24), PackedInt32Array(24, 25, 26), PackedInt32Array(21, 24, 26, 20), PackedInt32Array(16, 20, 26, 17), PackedInt32Array(15, 17, 27, 28), PackedInt32Array(27, 29, 12), PackedInt32Array(11, 30, 31, 32), PackedInt32Array(12, 11, 32, 28), PackedInt32Array(12, 28, 27)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(10, 10, 1144, 10, 1144, 240, 1498, 240, 1498, 230, 1160, 230, 1160, 10, 2291, 13, 2294, 230, 1667, 230, 1667, 240, 2294, 240, 2294, 408, 1776, 408, 1776, 418, 2294, 418, 2294, 638, 1160, 638, 1160, 418, 1613, 418, 1613, 408, 1144, 408, 1144, 638, 691, 638, 691, 648, 979, 678, 877, 877, 574, 960, 352, 879, 281, 659, 461, 648, 461, 638, 10, 638)])
 
 [node name="house" type="Node2D" unique_id=1804802909]
 
@@ -11,18 +21,117 @@ position = Vector2(576, 324)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=355679094]
 position = Vector2(576, 324)
+script = ExtResource("2_se78b")
 
-[node name="room 1" type="Node2D" parent="." unique_id=1571922469]
+[node name="screen_0_0" type="Node2D" parent="." unique_id=233721365]
 
-[node name="wall - long" parent="room 1" unique_id=300052247 instance=ExtResource("2_qtlar")]
+[node name="room 1" type="Node2D" parent="screen_0_0" unique_id=1571922469]
+
+[node name="wall" parent="screen_0_0/room 1" unique_id=300052247 instance=ExtResource("2_qtlar")]
 position = Vector2(576, 5)
 
-[node name="wall - long2" parent="room 1" unique_id=727578784 instance=ExtResource("2_qtlar")]
-position = Vector2(340, 214)
-scale = Vector2(0.14821696, 17.434246)
-
-[node name="wall - short" parent="room 1" unique_id=27762329 instance=ExtResource("3_rk7hg")]
+[node name="wall3" parent="screen_0_0/room 1" unique_id=559344305 instance=ExtResource("2_qtlar")]
 position = Vector2(5, 324)
+rotation = 1.5707964
+scale = Vector2(0.55, 1)
 
-[node name="wall - short2" parent="room 1" unique_id=1501889039 instance=ExtResource("3_rk7hg")]
-position = Vector2(1147, 324)
+[node name="doorway" type="Node2D" parent="screen_0_0/room 1" unique_id=1637417513]
+
+[node name="wall4" parent="screen_0_0/room 1/doorway" unique_id=1519762900 instance=ExtResource("2_qtlar")]
+position = Vector2(1148, 523.00006)
+rotation = 1.5707964
+scale = Vector2(0.2, 0.8)
+
+[node name="wall5" parent="screen_0_0/room 1/doorway" unique_id=1582680122 instance=ExtResource("2_qtlar")]
+position = Vector2(1148, 125)
+rotation = 1.5707964
+scale = Vector2(0.2, 0.8)
+
+[node name="doorway2" type="Node2D" parent="screen_0_0/room 1" unique_id=76159525]
+position = Vector2(546, 644)
+rotation = 1.5707964
+
+[node name="wall4" parent="screen_0_0/room 1/doorway2" unique_id=984182884 instance=ExtResource("2_qtlar")]
+position = Vector2(-0.99999493, 316)
+rotation = 1.5707964
+scale = Vector2(0.4, 1)
+
+[node name="wall5" parent="screen_0_0/room 1/doorway2" unique_id=629091724 instance=ExtResource("2_qtlar")]
+position = Vector2(-1.0000077, -376)
+rotation = 1.5707964
+scale = Vector2(0.4, 1)
+
+[node name="screen_0_1" type="Node2D" parent="." unique_id=1287654726]
+position = Vector2(1152, 0)
+
+[node name="room 2" type="Node2D" parent="screen_0_1" unique_id=1302348996]
+
+[node name="wall2" parent="screen_0_1/room 2" unique_id=961550796 instance=ExtResource("2_qtlar")]
+position = Vector2(576, 5)
+
+[node name="wall3" parent="screen_0_1/room 2" unique_id=1471159449 instance=ExtResource("2_qtlar")]
+position = Vector2(576, 643)
+
+[node name="wall4" parent="screen_0_1/room 2" unique_id=1361594684 instance=ExtResource("2_qtlar")]
+position = Vector2(1147, 324.00003)
+rotation = 1.5707964
+scale = Vector2(0.55, 1)
+
+[node name="doorway" type="Node2D" parent="screen_0_1/room 2" unique_id=53523026]
+position = Vector2(-1143, 0)
+
+[node name="wall4" parent="screen_0_1/room 2/doorway" unique_id=1168010094 instance=ExtResource("2_qtlar")]
+position = Vector2(1147, 523)
+rotation = 1.5707964
+scale = Vector2(0.2, 0.8)
+
+[node name="wall5" parent="screen_0_1/room 2/doorway" unique_id=2122426971 instance=ExtResource("2_qtlar")]
+position = Vector2(1147, 125)
+rotation = 1.5707964
+scale = Vector2(0.2, 0.8)
+
+[node name="doorway2" type="Node2D" parent="screen_0_1" unique_id=1979548904]
+position = Vector2(546, 236)
+rotation = 1.5707964
+
+[node name="wall4" parent="screen_0_1/doorway2" unique_id=1179359387 instance=ExtResource("2_qtlar")]
+position = Vector2(-0.9999772, 373)
+rotation = 1.5707964
+scale = Vector2(0.3, 1)
+
+[node name="wall5" parent="screen_0_1/doorway2" unique_id=127637446 instance=ExtResource("2_qtlar")]
+position = Vector2(-1.0000191, -286)
+rotation = 1.5707964
+scale = Vector2(0.55, 1)
+
+[node name="doorway3" type="Node2D" parent="screen_0_1" unique_id=364193422]
+position = Vector2(547, 414)
+rotation = -1.5707964
+
+[node name="wall4" parent="screen_0_1/doorway3" unique_id=1636630539 instance=ExtResource("2_qtlar")]
+position = Vector2(0.9999939, 336)
+rotation = 1.5707964
+scale = Vector2(0.45, 1)
+
+[node name="wall5" parent="screen_0_1/doorway3" unique_id=124603514 instance=ExtResource("2_qtlar")]
+position = Vector2(1.0000206, -316)
+rotation = 1.5707964
+scale = Vector2(0.4, 1)
+
+[node name="enemy" type="CharacterBody2D" parent="." unique_id=888736736 node_paths=PackedStringArray("target")]
+script = ExtResource("4_se78b")
+target = NodePath("../Player")
+
+[node name="Sprite2D" type="Sprite2D" parent="enemy" unique_id=1223929265]
+position = Vector2(88, 88)
+scale = Vector2(0.609375, 0.6484375)
+texture = ExtResource("5_3bgk5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy" unique_id=1614919998]
+position = Vector2(88, 88)
+shape = SubResource("RectangleShape2D_se78b")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="enemy" unique_id=1023864117]
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=212702945]
+navigation_polygon = SubResource("NavigationPolygon_vesw4")
