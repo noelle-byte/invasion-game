@@ -119,16 +119,15 @@ rotation = 1.5707964
 scale = Vector2(0.4, 1)
 
 [node name="enemy" type="CharacterBody2D" parent="." unique_id=888736736 node_paths=PackedStringArray("target")]
+position = Vector2(88, 88)
 script = ExtResource("4_se78b")
 target = NodePath("../Player")
 
 [node name="Sprite2D" type="Sprite2D" parent="enemy" unique_id=1223929265]
-position = Vector2(88, 88)
 scale = Vector2(0.609375, 0.6484375)
 texture = ExtResource("5_3bgk5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy" unique_id=1614919998]
-position = Vector2(88, 88)
 shape = SubResource("RectangleShape2D_se78b")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="enemy" unique_id=1023864117]
