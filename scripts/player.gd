@@ -1,15 +1,15 @@
 extends CharacterBody2D
 
 @onready var camera: Camera2D = $"../house/Camera2D"
-
+# rename the camera to make my life easier
 
 @export var speed = 300.0
-var can_move := true
-var failed := false
+var can_move := true # conditions to take control away if the player dies or something
+var failed := false 
 
 
 func _physics_process(_delta: float) -> void:
-	if not can_move:
+	if not can_move: # force stop the player if they should not be able to move
 		velocity = Vector2.ZERO
 		return
 
