@@ -133,4 +133,5 @@ shape = SubResource("RectangleShape2D_se78b")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="enemy" unique_id=1023864117]
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=212702945]
+visible = false
 navigation_polygon = SubResource("NavigationPolygon_vesw4")
