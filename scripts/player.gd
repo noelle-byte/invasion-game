@@ -8,6 +8,7 @@ var can_move := true
 var is_dead := false
 
 func die() -> void:
+	print("ive been got")
 	if is_dead:
 		return
 	is_dead = true
