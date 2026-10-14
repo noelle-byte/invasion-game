@@ -40,4 +40,4 @@ func _physics_process(_delta: float) -> void:
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if body == target:
 		print("got you")
-		target.die
+		target.die()

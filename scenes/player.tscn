@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://bhnayd87opeef" path="res://assets/icon.svg" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://bchwq5ihnk1jn" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="Script" uid="uid://c33j5atltlhqs" path="res://scripts/flashlight_pivot.gd" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://2wn6y82luoep" path="res://assets/bitmap.png" id="4_dqkch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vesw4"]
 size = Vector2(74, 74)
@@ -15,3 +17,11 @@ texture = ExtResource("1_3vyb7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2021077953]
 shape = SubResource("RectangleShape2D_vesw4")
+
+[node name="FlashlightPivot" type="Node2D" parent="." unique_id=1929153686]
+script = ExtResource("3_qhqgy")
+
+[node name="flashlight" type="PointLight2D" parent="FlashlightPivot" unique_id=2105479666]
+position = Vector2(621, -20)
+scale = Vector2(1.086821, 1)
+texture = ExtResource("4_dqkch")
