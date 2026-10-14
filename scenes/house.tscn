@@ -135,7 +135,7 @@ shape = SubResource("RectangleShape2D_se78b")
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="enemy" unique_id=1023864117]
 
 [node name="AttackArea" type="Area2D" parent="enemy" unique_id=1149113868]
-scale = Vector2(10, 10)
+scale = Vector2(5, 5)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy/AttackArea" unique_id=720221037]
 shape = SubResource("RectangleShape2D_vesw4")

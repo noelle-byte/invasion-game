@@ -15,7 +15,6 @@ func die() -> void:
 	velocity = Vector2.ZERO
 	
 	print("player died")
-	
 
 func _physics_process(_delta: float) -> void:
 	# Stop all movement if control has been disabled
