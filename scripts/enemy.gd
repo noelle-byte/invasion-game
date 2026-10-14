@@ -35,3 +35,8 @@ func _physics_process(_delta: float) -> void:
 
 	# no moving through walls please
 	move_and_slide()
+
+
+func _on_attack_area_body_entered(body: Node2D) -> void:
+	if body == target:
+		target.die

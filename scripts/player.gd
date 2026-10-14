@@ -5,7 +5,17 @@ extends CharacterBody2D
 
 # Allows other systems to disable player movement when needed
 var can_move := true
+var is_dead := false
 
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	can_move = false
+	velocity = Vector2.ZERO
+	
+	print("player died")
+	
 
 func _physics_process(_delta: float) -> void:
 	# Stop all movement if control has been disabled
