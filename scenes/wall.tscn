@@ -3,6 +3,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d7po0"]
 size = Vector2(1152, 10)
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vesw4"]
+polygon = PackedVector2Array(-576, -5, 576, -5, 576, 5, -576, 5)
+
 [node name="wall" type="StaticBody2D" unique_id=300052247]
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1337592586]
@@ -11,3 +14,6 @@ uv = PackedVector2Array(-244.83368, 47.500824, -249.22595, -223.35771, -228.7285
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2000211948]
 shape = SubResource("RectangleShape2D_d7po0")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=3256454]
+occluder = SubResource("OccluderPolygon2D_vesw4")
