@@ -6,7 +6,7 @@ extends CharacterBody2D
 # Allows other systems to disable player movement when needed
 var can_move := true
 var is_dead := false
-z
+
 func die() -> void:
 	print("ive been got")
 	if is_dead:
