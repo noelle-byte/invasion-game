@@ -1,7 +1,10 @@
 extends CharacterBody2D
 
 # How quickly the creature can move through the house
-@export var speed: float = 120.0
+@export var base_speed: float = 120.0
+@export var speed_increase_per_night: float = 15.0
+
+var speed: float
 
 @export var target: CharacterBody2D
 
@@ -10,12 +13,16 @@ extends CharacterBody2D
 
 
 func _ready() -> void:
+	speed = base_speed
+	
 	# Wait for Godot's navigation map to initialise before requesting a path
 	await get_tree().physics_frame
-
 	# Set the player's position as the creature's destination
 	navigation_agent.target_position = target.global_position
 
+func set_difficulty(night: int) -> void:
+	# Increase enemy movement speed as the nights progress
+	speed = base_speed + ((night - 1) * speed_increase_per_night)
 
 func _physics_process(_delta: float) -> void:
 	# Continuously update the target because the player is moving
