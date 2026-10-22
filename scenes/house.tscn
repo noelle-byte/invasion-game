@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://gwg7rvqfv20m" path="res://scripts/night_manager.gd" id="3_f74lx"]
 [ext_resource type="Script" uid="uid://cr0kgi5v154pm" path="res://scripts/enemy.gd" id="4_se78b"]
 [ext_resource type="Texture2D" uid="uid://bhnayd87opeef" path="res://assets/icon.svg" id="5_3bgk5"]
+[ext_resource type="PackedScene" uid="uid://1ycylqagi16t" path="res://scenes/BatteryPickup.tscn" id="7_ptc3g"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
 size = Vector2(78, 82)
@@ -33,11 +34,11 @@ position = Vector2(576, 324)
 script = ExtResource("2_se78b")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1003012762]
+visible = false
 color = Color(0.09803922, 0, 0.09803922, 1)
 
 [node name="NightManager" type="Node" parent="." unique_id=1596214572 node_paths=PackedStringArray("player", "enemy")]
 script = ExtResource("3_f74lx")
-night_duration = 10.0
 player = NodePath("../Player")
 enemy = NodePath("../enemy")
 
@@ -158,5 +159,11 @@ shape = SubResource("RectangleShape2D_vesw4")
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="." unique_id=212702945]
 navigation_polygon = SubResource("NavigationPolygon_vesw4")
+
+[node name="BatteryPickup" parent="." unique_id=1591127518 instance=ExtResource("7_ptc3g")]
+position = Vector2(595, 837)
+
+[node name="BatteryPickup2" parent="." unique_id=1223284971 instance=ExtResource("7_ptc3g")]
+position = Vector2(1039, 135)
 
 [connection signal="body_entered" from="enemy/AttackArea" to="enemy" method="_on_attack_area_body_entered"]
