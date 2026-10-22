@@ -1,5 +1,10 @@
 extends CharacterBody2D
 
+@export var starts_active := false
+
+@onready var body_collision: CollisionShape2D = $CollisionShape2D
+@onready var attack_area: Area2D = $AttackArea
+
 # How quickly the creature can move through the house
 @export var base_speed: float = 120.0
 @export var speed_increase_per_night: float = 15.0
@@ -15,11 +20,28 @@ var can_move := true
 
 func _ready() -> void:
 	speed = base_speed
-	
-	# Wait for Godot's navigation map to initialise before requesting a path
+
+	set_active(starts_active)
+
 	await get_tree().physics_frame
-	# Set the player's position as the creature's destination
 	navigation_agent.target_position = target.global_position
+
+func set_active(value: bool) -> void:
+	can_move = value
+	visible = value
+
+	# Disable physical collision while the creature is outside
+	body_collision.set_deferred("disabled", not value)
+
+	# Disable its kill area while outside
+	attack_area.set_deferred("monitoring", value)
+
+
+func breach_at(spawn_position: Vector2) -> void:
+	global_position = spawn_position
+	set_active(true)
+
+	print("Enemy entered the house")
 
 func set_difficulty(night: int) -> void:
 	speed = base_speed + ((night - 1) * speed_increase_per_night)

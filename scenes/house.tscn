@@ -4,9 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://bcnr2aqajleyh" path="res://scenes/wall.tscn" id="2_qtlar"]
 [ext_resource type="Script" uid="uid://cwauj4pnwa175" path="res://scripts/grid_camera.gd" id="2_se78b"]
 [ext_resource type="Script" uid="uid://gwg7rvqfv20m" path="res://scripts/night_manager.gd" id="3_f74lx"]
+[ext_resource type="Script" uid="uid://c4i3vflsldcjs" path="res://scripts/knock_manager.gd" id="4_bwc8c"]
 [ext_resource type="Script" uid="uid://cr0kgi5v154pm" path="res://scripts/enemy.gd" id="4_se78b"]
 [ext_resource type="Texture2D" uid="uid://bhnayd87opeef" path="res://assets/icon.svg" id="5_3bgk5"]
 [ext_resource type="PackedScene" uid="uid://1ycylqagi16t" path="res://scenes/BatteryPickup.tscn" id="7_ptc3g"]
+[ext_resource type="PackedScene" uid="uid://cfhh01j2l0my4" path="res://scenes/door.tscn" id="8_wcu0q"]
+[ext_resource type="PackedScene" uid="uid://dqrr34ttpmm7r" path="res://scenes/wallPhone.tscn" id="10_mhx8p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
 size = Vector2(78, 82)
@@ -41,6 +44,9 @@ color = Color(0.09803922, 0, 0.09803922, 1)
 script = ExtResource("3_f74lx")
 player = NodePath("../Player")
 enemy = NodePath("../enemy")
+
+[node name="KnockManager" type="Node" parent="." unique_id=1878103858]
+script = ExtResource("4_bwc8c")
 
 [node name="screen_0_0" type="Node2D" parent="." unique_id=233721365]
 
@@ -165,5 +171,12 @@ position = Vector2(595, 837)
 
 [node name="BatteryPickup2" parent="." unique_id=1223284971 instance=ExtResource("7_ptc3g")]
 position = Vector2(1039, 135)
+
+[node name="Door" parent="." unique_id=817346794 instance=ExtResource("8_wcu0q")]
+position = Vector2(575, 17)
+
+[node name="WallPhone" parent="." unique_id=1739332411 instance=ExtResource("10_mhx8p")]
+position = Vector2(1129, 487)
+rotation = 1.5707964
 
 [connection signal="body_entered" from="enemy/AttackArea" to="enemy" method="_on_attack_area_body_entered"]

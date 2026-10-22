@@ -24,12 +24,14 @@ script = ExtResource("3_qhqgy")
 
 [node name="flashlight" type="PointLight2D" parent="FlashlightPivot" unique_id=2105479666]
 scale = Vector2(1.086821, 1)
+energy = 0.8
 shadow_enabled = true
 texture = ExtResource("4_dqkch")
 offset = Vector2(530, -20)
 
 [node name="CircleLight2D" type="PointLight2D" parent="FlashlightPivot" unique_id=1571191951]
 scale = Vector2(0.3, 0.3)
+energy = 0.5
 shadow_enabled = true
 texture = ExtResource("5_qlg0r")
 

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://cfhh01j2l0my4"]
+
+[ext_resource type="Script" uid="uid://by3ruqoc4cjvt" path="res://scripts/door.gd" id="1_hpvv5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vesw4"]
+size = Vector2(150, 30)
+
+[node name="Door" type="Node2D" unique_id=817346794]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1767420634]
+script = ExtResource("1_hpvv5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1155291406]
+shape = SubResource("RectangleShape2D_vesw4")
+
+[node name="Polygon2D" type="Polygon2D" parent="Area2D" unique_id=1424690086]
+color = Color(0.8448745, 2.8493405e-05, 0.606425, 1)
+polygon = PackedVector2Array(-75, -15, 75, -15, 75, 15, -75, 15)
+
+[node name="Marker2D" type="Marker2D" parent="Area2D" unique_id=1483699403]
+position = Vector2(0, 60)
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]

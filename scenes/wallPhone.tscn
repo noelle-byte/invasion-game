@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dqrr34ttpmm7r"]
+
+[ext_resource type="Script" uid="uid://cw2vlnnnaqdxu" path="res://scripts/WallPhone.gd" id="1_7bkde"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vesw4"]
+size = Vector2(60, 30)
+
+[node name="WallPhone" type="Node2D" unique_id=1739332411]
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1202324015]
+script = ExtResource("1_7bkde")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1216748897]
+shape = SubResource("RectangleShape2D_vesw4")
+
+[node name="Polygon2D" type="Polygon2D" parent="Area2D" unique_id=183474262]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(-30, -15, 30, -15, 30, 15, -30, 15)
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[connection signal="body_exited" from="Area2D" to="Area2D" method="_on_body_exited"]

@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
 
 
 func toggle_flashlight() -> void:
-	# A completely empty flashlight cannot be switched back on
+	# An empty flashlight cannot be switched back on
 	if battery <= 0.0 and not flashlight_on:
 		return
 
