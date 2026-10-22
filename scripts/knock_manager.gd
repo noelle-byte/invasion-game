@@ -1,14 +1,14 @@
 extends Node
 
+@export var night_manager: Node
+@onready var door = $"../Door"
+@export var enemy: CharacterBody2D
+
 enum KnockType {
 	NONE,
 	REAL,
 	FALSE
 }
-
-@export var night_manager: Node
-@export var door: Area2D
-@export var enemy: CharacterBody2D
 
 # Chance of getting a knock opportunity:
 # roll 1-20, success if roll <= AI level
@@ -89,7 +89,7 @@ func _on_night_changed(night: int) -> void:
 		20
 	)
 
-	var index := min(night - 1, false_start_hours.size() - 1)
+	var index: int = mini(night - 1, false_start_hours.size() - 1)
 	false_start_hour = false_start_hours[index]
 
 	breach_active = false
@@ -108,7 +108,7 @@ func attempt_knock() -> void:
 	if roll > ai_level:
 		return
 
-	var can_false := (
+	var can_false: bool = (
 		night_manager.get_hours_since_midnight() >= false_start_hour
 	)
 

@@ -45,8 +45,10 @@ script = ExtResource("3_f74lx")
 player = NodePath("../Player")
 enemy = NodePath("../enemy")
 
-[node name="KnockManager" type="Node" parent="." unique_id=1878103858]
+[node name="KnockManager" type="Node" parent="." unique_id=1878103858 node_paths=PackedStringArray("night_manager", "enemy")]
 script = ExtResource("4_bwc8c")
+night_manager = NodePath("../NightManager")
+enemy = NodePath("../enemy")
 
 [node name="screen_0_0" type="Node2D" parent="." unique_id=233721365]
 
