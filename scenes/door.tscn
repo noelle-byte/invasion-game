@@ -17,7 +17,7 @@ shape = SubResource("RectangleShape2D_vesw4")
 color = Color(0.8448745, 2.8493405e-05, 0.606425, 1)
 polygon = PackedVector2Array(-75, -15, 75, -15, 75, 15, -75, 15)
 
-[node name="Marker2D" type="Marker2D" parent="Area2D" unique_id=1483699403]
+[node name="BreachSpawn" type="Marker2D" parent="Area2D" unique_id=1483699403]
 position = Vector2(0, 60)
 
 [connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]

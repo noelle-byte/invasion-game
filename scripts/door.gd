@@ -2,8 +2,7 @@ extends Area2D
 
 signal knocked_back
 
-@export var player: CharacterBody2D
-
+@onready var player: CharacterBody2D = $"../../Player"
 @onready var breach_spawn: Marker2D = $BreachSpawn
 
 var player_nearby := false
