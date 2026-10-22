@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bfk8mmwwnrfu6" path="res://scenes/player.tscn" id="1_d7po0"]
 [ext_resource type="PackedScene" uid="uid://bcnr2aqajleyh" path="res://scenes/wall.tscn" id="2_qtlar"]
 [ext_resource type="Script" uid="uid://cwauj4pnwa175" path="res://scripts/grid_camera.gd" id="2_se78b"]
+[ext_resource type="Script" uid="uid://gwg7rvqfv20m" path="res://scripts/night_manager.gd" id="3_f74lx"]
 [ext_resource type="Script" uid="uid://cr0kgi5v154pm" path="res://scripts/enemy.gd" id="4_se78b"]
 [ext_resource type="Texture2D" uid="uid://bhnayd87opeef" path="res://assets/icon.svg" id="5_3bgk5"]
 
@@ -33,6 +34,12 @@ script = ExtResource("2_se78b")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1003012762]
 color = Color(0.09803922, 0, 0.09803922, 1)
+
+[node name="NightManager" type="Node" parent="." unique_id=1596214572 node_paths=PackedStringArray("player", "enemy")]
+script = ExtResource("3_f74lx")
+night_duration = 10.0
+player = NodePath("../Player")
+enemy = NodePath("../enemy")
 
 [node name="screen_0_0" type="Node2D" parent="." unique_id=233721365]
 

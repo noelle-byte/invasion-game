@@ -5,6 +5,7 @@ extends CharacterBody2D
 @export var speed_increase_per_night: float = 15.0
 
 var speed: float
+var can_move := true
 
 @export var target: CharacterBody2D
 
@@ -21,10 +22,15 @@ func _ready() -> void:
 	navigation_agent.target_position = target.global_position
 
 func set_difficulty(night: int) -> void:
-	# Increase enemy movement speed as the nights progress
 	speed = base_speed + ((night - 1) * speed_increase_per_night)
+	print("Enemy speed: ", speed)
 
 func _physics_process(_delta: float) -> void:
+	# no moving when your not supposed to be moving
+	if not can_move:
+		velocity = Vector2.ZERO
+		return
+	
 	# Continuously update the target because the player is moving
 	navigation_agent.target_position = target.global_position
 
@@ -45,6 +51,10 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
+	# no killing when you not supposed to do that
+	if not can_move:
+		return
+	# you can kill things now
 	if body == target:
 		print("got you")
 		target.die()

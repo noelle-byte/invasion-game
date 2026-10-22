@@ -58,5 +58,5 @@ func drain_battery(delta: float) -> void:
 
 
 func set_difficulty(night: int) -> void:
-	# Later nights consume flashlight battery more quickly
 	battery_drain_rate = 3.0 + ((night - 1) * drain_increase_per_night)
+	print("Battery drain: ", battery_drain_rate)
