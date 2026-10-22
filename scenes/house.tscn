@@ -38,7 +38,7 @@ script = ExtResource("2_se78b")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1003012762]
 visible = false
-color = Color(0.09803922, 0, 0.09803922, 1)
+color = Color(0.05882353, 0, 0.05882353, 1)
 
 [node name="NightManager" type="Node" parent="." unique_id=1596214572 node_paths=PackedStringArray("player", "enemy")]
 script = ExtResource("3_f74lx")
@@ -262,6 +262,10 @@ navigation_polygon = SubResource("NavigationPolygon_vesw4")
 
 [node name="Door" parent="." unique_id=817346794 instance=ExtResource("8_wcu0q")]
 position = Vector2(575, 17)
+
+[node name="Door2" parent="." unique_id=5539986 instance=ExtResource("8_wcu0q")]
+position = Vector2(2114, 1289)
+rotation = 3.1415927
 
 [node name="WallPhone" parent="." unique_id=1739332411 instance=ExtResource("10_mhx8p")]
 position = Vector2(1129, 487)
