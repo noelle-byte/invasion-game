@@ -1,7 +1,7 @@
 extends Node
 
 @export var night_manager: Node
-@onready var door = $"../Door"
+@onready var door = $"../Door/Area2D"
 @export var enemy: CharacterBody2D
 
 enum KnockType {

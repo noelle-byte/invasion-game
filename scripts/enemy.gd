@@ -17,6 +17,10 @@ var can_move := true
 # NavigationAgent2D calculates the route around walls and through rooms
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 
+@export var breach_grace_period: float = 2.5
+
+var can_attack := false
+
 
 func _ready() -> void:
 	speed = base_speed
@@ -41,7 +45,20 @@ func breach_at(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	set_active(true)
 
+	# Give the player time to react to the breach
+	can_move = false
+	can_attack = false
+
 	print("Enemy entered the house")
+
+	await get_tree().create_timer(breach_grace_period).timeout
+
+	can_move = true
+	can_attack = true
+
+	try_attack_player()
+
+	print("Enemy is now hunting")
 
 func set_difficulty(night: int) -> void:
 	speed = base_speed + ((night - 1) * speed_increase_per_night)
@@ -73,10 +90,14 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
-	# no killing when you not supposed to do that
-	if not can_move:
-		return
-	# you can kill things now
-	if body == target:
-		print("got you")
+	if can_attack and body == target:
 		target.die()
+
+func try_attack_player() -> void:
+	if not can_attack:
+		return
+
+	for body in attack_area.get_overlapping_bodies():
+		if body == target:
+			target.die()
+			return

@@ -14,11 +14,6 @@ var call_playing := false
 func _ready() -> void:
 	night_manager.waiting_for_call.connect(_on_waiting_for_call)
 
-	# NightManager may already have entered its safe state
-	# before this node's _ready() runs.
-	if not night_manager.game_running:
-		start_ringing(night_manager.current_night)
-
 
 func _process(_delta: float) -> void:
 	if (

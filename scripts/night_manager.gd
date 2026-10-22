@@ -19,7 +19,7 @@ var game_running := false
 
 
 func _ready() -> void:
-	prepare_night()
+	prepare_night.call_deferred()
 
 
 func _process(delta: float) -> void:

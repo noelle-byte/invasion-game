@@ -26,10 +26,10 @@ func _physics_process(_delta: float) -> void:
 	# Combine the four movement inputs into one direction vector
 	# Input.get_vector also prevents diagonal movement being faster
 	var direction := Input.get_vector(
-		"ui_left",
-		"ui_right",
-		"ui_up",
-		"ui_down"
+		"left",
+		"right",
+		"up",
+		"down"
 	)
 
 	# Convert the input direction into the player's velocity
