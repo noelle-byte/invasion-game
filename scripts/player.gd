@@ -1,9 +1,18 @@
+class_name PlayerCharacter
 extends CharacterBody2D
 
-# Controls how quickly the player moves
-@export var speed: float = 300.0
+signal stamina_changed(current_stamina: float, max_stamina: float)
 
-# Allows other systems to disable player movement when needed
+@export var walk_speed: float = 300.0
+@export var run_speed: float = 450.0
+
+@export var max_stamina: float = 100.0
+@export var stamina_drain_rate: float = 30.0
+@export var stamina_recovery_rate: float = 20.0
+
+var stamina: float = max_stamina
+var is_running := false
+
 var can_move := true
 var is_dead := false
 
@@ -17,14 +26,12 @@ func die() -> void:
 	
 	print("player died")
 
-func _physics_process(_delta: float) -> void:
-	# Stop all movement if control has been disabled
+func _physics_process(delta: float) -> void:
 	if not can_move:
 		velocity = Vector2.ZERO
+		is_running = false
 		return
 
-	# Combine the four movement inputs into one direction vector
-	# Input.get_vector also prevents diagonal movement being faster
 	var direction := Input.get_vector(
 		"left",
 		"right",
@@ -32,8 +39,25 @@ func _physics_process(_delta: float) -> void:
 		"down"
 	)
 
-	# Convert the input direction into the player's velocity
-	velocity = direction * speed
+	var wants_to_run := (
+		Input.is_action_pressed("run")
+		and direction != Vector2.ZERO
+		and stamina > 0.0
+	)
 
-	# Move the CharacterBody2D while respecting collisions
+	is_running = wants_to_run
+
+	var current_speed := walk_speed
+
+	if is_running:
+		current_speed = run_speed
+		stamina -= stamina_drain_rate * delta
+		stamina = max(stamina, 0.0)
+	else:
+		stamina += stamina_recovery_rate * delta
+		stamina = min(stamina, max_stamina)
+
+	stamina_changed.emit(stamina, max_stamina)
+
+	velocity = direction * current_speed
 	move_and_slide()
