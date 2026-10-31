@@ -54,6 +54,10 @@ func set_active(value: bool) -> void:
 
 	if not value:
 		can_attack = false
+		aggression = 0.0
+		behaviour_state = BehaviourState.ROAM
+		last_known_position = Vector2.ZERO
+		sees_player = false
 
 	body_collision.set_deferred("disabled", not value)
 	attack_area.set_deferred("monitoring", value)
@@ -135,17 +139,21 @@ func breach_at(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	set_active(true)
 
-	# Give the player time to react to the breach
 	can_move = false
 	can_attack = false
+
+	# The creature knows roughly where the player was when it entered
+	last_known_position = target.global_position
 
 	print("Enemy entered the house")
 
 	await get_tree().create_timer(breach_grace_period).timeout
 
-	# The night may have ended during the grace period
 	if not visible:
 		return
+
+	aggression = 35.0
+	behaviour_state = BehaviourState.HUNT
 
 	can_move = true
 	can_attack = true
@@ -179,7 +187,6 @@ func _physics_process(delta: float) -> void:
 
 	velocity = direction * speed
 	move_and_slide()
-
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if can_attack and body == target:

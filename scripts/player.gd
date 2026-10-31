@@ -9,7 +9,9 @@ signal stamina_changed(current_stamina: float, max_stamina: float)
 @export var max_stamina: float = 100.0
 @export var stamina_drain_rate: float = 30.0
 @export var stamina_recovery_rate: float = 20.0
+@export var stamina_resume_threshold: float = 25.0
 
+var exhausted := false
 var stamina: float = max_stamina
 var is_running := false
 
@@ -39,10 +41,16 @@ func _physics_process(delta: float) -> void:
 		"down"
 	)
 
+	if stamina <= 0.0:
+		exhausted = true
+
+	if exhausted and stamina >= stamina_resume_threshold:
+		exhausted = false
+	
 	var wants_to_run := (
 		Input.is_action_pressed("run")
 		and direction != Vector2.ZERO
-		and stamina > 0.0
+		and not exhausted
 	)
 
 	is_running = wants_to_run
