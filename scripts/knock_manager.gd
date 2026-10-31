@@ -1,7 +1,11 @@
 extends Node
 
 @export var night_manager: Node
-@onready var door = $"../Door/Area2D"
+@onready var doors: Array[Area2D] = [
+	$"../Door/Area2D",
+	$"../Door2/Area2D"
+]
+var current_door: Area2D
 @export var enemy: CharacterBody2D
 
 enum KnockType {
@@ -50,11 +54,22 @@ var breach_active := false
 
 
 func _ready() -> void:
-	door.knocked_back.connect(_on_knocked_back)
+	for door in doors:
+		door.knocked_back.connect(_on_knocked_back.bind(door))
+
 	night_manager.night_changed.connect(_on_night_changed)
 
 	check_time_remaining = check_interval
 
+func start_knock(type: KnockType) -> void:
+	current_knock = type
+	current_door = doors.pick_random()
+	response_time_remaining = response_window
+
+	if type == KnockType.REAL:
+		print("KNOCK KNOCK KNOCK - normal at ", current_door.get_parent().name)
+	else:
+		print("KNOCK... KNOCK KNOCK - weird at ", current_door.get_parent().name)
 
 func _process(delta: float) -> void:
 	if not night_manager.game_running:
@@ -118,29 +133,21 @@ func attempt_knock() -> void:
 		start_knock(KnockType.REAL)
 
 
-func start_knock(type: KnockType) -> void:
-	current_knock = type
-	response_time_remaining = response_window
-
-	if type == KnockType.REAL:
-		print("KNOCK KNOCK KNOCK - normal")
-	else:
-		print("KNOCK... KNOCK KNOCK - weird")
-
-
-func _on_knocked_back() -> void:
-	# Knocking when there is no encounter does nothing
+func _on_knocked_back(door: Area2D) -> void:
 	if current_knock == KnockType.NONE:
 		print("Nothing answered")
 		return
 
-	# Correct response to a real knock
+	# The player knocked at the wrong door
+	if door != current_door:
+		print("Wrong door")
+		return
+
 	if current_knock == KnockType.REAL:
 		print("Real Knocker repelled")
 		clear_encounter()
 		return
 
-	# Wrong response to a false knock
 	if current_knock == KnockType.FALSE:
 		print("You answered the false knock")
 		breach()
@@ -162,11 +169,12 @@ func _resolve_timeout() -> void:
 func breach() -> void:
 	breach_active = true
 
-	enemy.breach_at(door.get_breach_position())
+	enemy.breach_at(current_door.get_breach_position())
 
 	clear_encounter()
 
 
 func clear_encounter() -> void:
 	current_knock = KnockType.NONE
+	current_door = null
 	response_time_remaining = 0.0

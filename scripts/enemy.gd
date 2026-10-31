@@ -34,10 +34,10 @@ func set_active(value: bool) -> void:
 	can_move = value
 	visible = value
 
-	# Disable physical collision while the creature is outside
-	body_collision.set_deferred("disabled", not value)
+	if not value:
+		can_attack = false
 
-	# Disable its kill area while outside
+	body_collision.set_deferred("disabled", not value)
 	attack_area.set_deferred("monitoring", value)
 
 
@@ -52,6 +52,10 @@ func breach_at(spawn_position: Vector2) -> void:
 	print("Enemy entered the house")
 
 	await get_tree().create_timer(breach_grace_period).timeout
+
+	# The night may have ended during the grace period
+	if not visible:
+		return
 
 	can_move = true
 	can_attack = true
