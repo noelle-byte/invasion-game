@@ -19,6 +19,11 @@ var can_move := true
 
 @export var breach_grace_period: float = 2.5
 
+@export var flash_stun_duration: float = 1.5
+@export var flash_aggression_reduction: float = 25.0
+
+var stun_time_remaining: float = 0.0
+
 var can_attack := false
 
 enum BehaviourState {
@@ -45,6 +50,7 @@ func _ready() -> void:
 	speed = base_speed
 
 	set_active(starts_active)
+	add_to_group("flashable")
 
 	await get_tree().physics_frame
 
@@ -170,9 +176,17 @@ func _physics_process(delta: float) -> void:
 	if not can_move:
 		velocity = Vector2.ZERO
 		return
-
+	
+	if stun_time_remaining > 0.0:
+		stun_time_remaining -= delta
+		stun_time_remaining = max(stun_time_remaining, 0.0)
+		velocity = Vector2.ZERO
+		return
+	
 	update_awareness(delta)
 	update_navigation_target()
+
+
 
 	if behaviour_state == BehaviourState.ROAM:
 		velocity = Vector2.ZERO
@@ -200,3 +214,20 @@ func try_attack_player() -> void:
 		if body == target:
 			target.die()
 			return
+
+func receive_flash() -> void:
+	stun_time_remaining = max(
+		stun_time_remaining,
+		flash_stun_duration
+	)
+
+	aggression = max(
+		aggression - flash_aggression_reduction,
+		0.0
+	)
+
+	update_behaviour_state()
+
+	velocity = Vector2.ZERO
+
+	print("Enemy flashed - aggression: ", aggression)

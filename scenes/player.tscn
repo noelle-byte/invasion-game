@@ -21,6 +21,13 @@ shape = SubResource("RectangleShape2D_vesw4")
 
 [node name="FlashlightPivot" type="Node2D" parent="." unique_id=1929153686]
 script = ExtResource("3_qhqgy")
+max_battery = null
+battery_drain_rate = null
+drain_increase_per_night = null
+flash_range = null
+flash_half_angle_degrees = null
+flash_visual_duration = null
+flash_energy = null
 
 [node name="flashlight" type="PointLight2D" parent="FlashlightPivot" unique_id=2105479666]
 scale = Vector2(1.086821, 1)
@@ -34,6 +41,8 @@ scale = Vector2(0.3, 0.3)
 energy = 0.5
 shadow_enabled = true
 texture = ExtResource("5_qlg0r")
+
+[node name="RayCast2D" type="RayCast2D" parent="FlashlightPivot" unique_id=1621465171]
 
 [node name="BatteryLabel" type="Label" parent="." unique_id=219508784]
 unique_name_in_owner = true

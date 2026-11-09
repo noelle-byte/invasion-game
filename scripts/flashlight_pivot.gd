@@ -14,6 +14,16 @@ signal battery_changed(current_battery: float, max_battery: float)
 @onready var flashlight: PointLight2D = $flashlight
 @onready var battery_label: Label = $"../BatteryLabel"
 
+@export var flash_range: float = 700.0
+@export var flash_half_angle_degrees: float = 30.0
+@export var flash_visual_duration: float = 0.12
+@export var flash_energy: float = 4.0
+
+@onready var flash_ray: RayCast2D = $FlashRay
+
+var current_night: int = 1
+var flash_in_progress := false
+
 var battery: float
 var flashlight_on := true
 
@@ -36,6 +46,9 @@ func _process(delta: float) -> void:
 	# Consume battery while the flashlight is active
 	if flashlight_on:
 		drain_battery(delta)
+	
+	if Input.is_action_just_pressed("flash"):
+		attempt_flash()
 
 
 func toggle_flashlight() -> void:
@@ -60,6 +73,7 @@ func drain_battery(delta: float) -> void:
 
 
 func set_difficulty(night: int) -> void:
+	current_night = night
 	battery_drain_rate = 3.0 + ((night - 1) * drain_increase_per_night)
 	print("Battery drain: ", battery_drain_rate)
 
@@ -72,3 +86,52 @@ func add_battery(amount: float) -> void:
 
 func update_battery_display() -> void:
 	battery_label.text = str(roundi(battery))
+
+func attempt_flash() -> void:
+	if flash_in_progress:
+		return
+
+	var flash_cost := 10.0 + (3.0 * current_night)
+
+	if battery < flash_cost:
+		print("Not enough battery to flash")
+		return
+
+	battery -= flash_cost
+	update_battery_display()
+	battery_changed.emit(battery, max_battery)
+
+	flash_in_progress = true
+
+	# Briefly make the flashlight extremely bright
+	var normal_energy := flashlight.energy
+	flashlight.enabled = true
+	flashlight.energy = flash_energy
+
+	for enemy in get_tree().get_nodes_in_group("flashable"):
+		if enemy is Node2D and enemy_in_flash(enemy):
+			enemy.receive_flash()
+
+	await get_tree().create_timer(flash_visual_duration).timeout
+
+	flashlight.energy = normal_energy
+	flashlight.enabled = flashlight_on
+	flash_in_progress = false
+
+func enemy_in_flash(enemy: Node2D) -> bool:
+	var to_enemy := enemy.global_position - global_position
+
+	if to_enemy.length() > flash_range:
+		return false
+
+	var flashlight_direction := Vector2.RIGHT.rotated(global_rotation)
+	var angle := abs(flashlight_direction.angle_to(to_enemy.normalized()))
+
+	if angle > deg_to_rad(flash_half_angle_degrees):
+		return false
+
+	# Make sure a wall isn't between the flashlight and the creature
+	flash_ray.target_position = to_local(enemy.global_position)
+	flash_ray.force_raycast_update()
+
+	return flash_ray.is_colliding() and flash_ray.get_collider() == enemy

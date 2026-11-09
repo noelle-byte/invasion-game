@@ -320,4 +320,24 @@ position = Vector2(1961, 1179)
 [node name="BatteryPickup5" parent="Pickups" unique_id=1323606252 instance=ExtResource("7_ptc3g")]
 position = Vector2(1293, 772)
 
+[node name="RoamPoints" type="Node2D" parent="." unique_id=1092743409]
+
+[node name="DiningRoom" type="Marker2D" parent="RoamPoints" unique_id=313607142]
+position = Vector2(238, 983)
+
+[node name="Hall" type="Marker2D" parent="RoamPoints" unique_id=1097522063]
+position = Vector2(2142, 93)
+
+[node name="Hall2" type="Marker2D" parent="RoamPoints" unique_id=77809967]
+position = Vector2(2002, 350)
+
+[node name="Hall3" type="Marker2D" parent="RoamPoints" unique_id=1586785426]
+position = Vector2(1320, 552)
+
+[node name="FrontRoom" type="Marker2D" parent="RoamPoints" unique_id=1826853527]
+position = Vector2(773, 153)
+
+[node name="BackRoom" type="Marker2D" parent="RoamPoints" unique_id=787752028]
+position = Vector2(1813, 970)
+
 [connection signal="body_entered" from="enemy/AttackArea" to="enemy" method="_on_attack_area_body_entered"]
