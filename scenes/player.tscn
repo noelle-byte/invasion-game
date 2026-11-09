@@ -6,6 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://2wn6y82luoep" path="res://assets/bitmap.png" id="4_dqkch"]
 [ext_resource type="Texture2D" uid="uid://cnduomlcgtap8" path="res://assets/circle light.svg" id="5_qlg0r"]
 
+[ext_resource type="Script" path="res://scripts/sound_ring.gd" id="6_ring"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ring"]
+light_mode = 1
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vesw4"]
 size = Vector2(74, 74)
 
@@ -21,13 +26,6 @@ shape = SubResource("RectangleShape2D_vesw4")
 
 [node name="FlashlightPivot" type="Node2D" parent="." unique_id=1929153686]
 script = ExtResource("3_qhqgy")
-max_battery = null
-battery_drain_rate = null
-drain_increase_per_night = null
-flash_range = null
-flash_half_angle_degrees = null
-flash_visual_duration = null
-flash_energy = null
 
 [node name="flashlight" type="PointLight2D" parent="FlashlightPivot" unique_id=2105479666]
 scale = Vector2(1.086821, 1)
@@ -42,12 +40,9 @@ energy = 0.5
 shadow_enabled = true
 texture = ExtResource("5_qlg0r")
 
-[node name="RayCast2D" type="RayCast2D" parent="FlashlightPivot" unique_id=1621465171]
+[node name="FlashRay" type="RayCast2D" parent="FlashlightPivot" unique_id=1621465171]
 
-[node name="BatteryLabel" type="Label" parent="." unique_id=219508784]
-unique_name_in_owner = true
-offset_left = -19.0
-offset_top = -68.0
-offset_right = 21.0
-offset_bottom = -45.0
-text = "100"
+
+[node name="SoundRing" type="Node2D" parent="."]
+script = ExtResource("6_ring")
+material = SubResource("CanvasItemMaterial_ring")

@@ -26,6 +26,11 @@ var stun_time_remaining: float = 0.0
 
 var can_attack := false
 
+@onready var sound_cues: Node = $"../SoundCues"
+@export var footstep_distance: float = 110.0
+@export var footstep_hearing_radius: float = 850.0
+var distance_since_step: float = 0.0
+
 enum BehaviourState {
 	ROAM,
 	HUNT,
@@ -36,7 +41,7 @@ enum BehaviourState {
 
 @export var sight_aggression_rate: float = 30.0
 @export var running_aggression_rate: float = 18.0
-@export var aggression_decay_rate: float = 6.0
+@export var aggression_decay_rate: float = 9.0
 
 @export var running_hearing_radius: float = 550.0
 
@@ -70,6 +75,7 @@ func set_active(value: bool) -> void:
 	if not value:
 		can_attack = false
 		stun_time_remaining = 0.0
+		distance_since_step = 0.0
 		roam_destination = null
 		roam_wait_remaining = 0.0
 		aggression = 0.0
@@ -182,6 +188,7 @@ func breach_at(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	set_active(true)
 	var breach_id := activation_id
+	sound_cues.emit_sound(&"breach", spawn_position)
 
 	can_move = false
 	can_attack = false
@@ -235,7 +242,12 @@ func _physics_process(delta: float) -> void:
 	var direction := global_position.direction_to(next_position)
 
 	velocity = direction * speed
+	var previous_position: Vector2 = global_position
 	move_and_slide()
+	distance_since_step += previous_position.distance_to(global_position)
+	if distance_since_step >= footstep_distance:
+		distance_since_step = fmod(distance_since_step, footstep_distance)
+		sound_cues.emit_sound(&"footstep", global_position, footstep_hearing_radius)
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
 	if can_attack and stun_time_remaining <= 0.0 and body == target:

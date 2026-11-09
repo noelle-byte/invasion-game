@@ -5,6 +5,14 @@ extends Node
 	$"../Door/Area2D",
 	$"../Door2/Area2D"
 ]
+@onready var sound_cues: Node = $"../SoundCues"
+# Both patterns use the same cue; only their rhythm differs.
+const REAL_KNOCK_TIMES: Array[float] = [0.0, 0.45, 0.9]
+const FALSE_KNOCK_TIMES: Array[float] = [0.0, 0.9, 1.15]
+var knock_times: Array[float] = []
+var knock_elapsed: float = 0.0
+var next_knock: int = 0
+
 var current_door: Area2D
 @export var enemy: CharacterBody2D
 
@@ -25,7 +33,7 @@ enum KnockType {
 @export var check_interval: float = 5.0
 
 # How long the player has to respond
-@export var response_window: float = 4.0
+@export var response_window: float = 8.0
 
 # Hours after midnight when false knocks become possible
 # Night 1 = 3AM
@@ -65,16 +73,26 @@ func start_knock(type: KnockType) -> void:
 	current_knock = type
 	current_door = doors.pick_random()
 	response_time_remaining = response_window
+	knock_times = REAL_KNOCK_TIMES if type == KnockType.REAL else FALSE_KNOCK_TIMES
+	knock_elapsed = 0.0
+	next_knock = 0
+	update_knock_sounds(0.0)
 
 	if type == KnockType.REAL:
 		print("KNOCK KNOCK KNOCK - normal at ", current_door.get_parent().name)
 	else:
 		print("KNOCK... KNOCK KNOCK - weird at ", current_door.get_parent().name)
 
+func update_knock_sounds(delta: float) -> void:
+	knock_elapsed += delta
+	while next_knock < knock_times.size() and knock_elapsed >= knock_times[next_knock]:
+		sound_cues.emit_sound(&"knock", current_door.global_position)
+		next_knock += 1
+
 func _process(delta: float) -> void:
 	if not night_manager.game_running:
 		check_time_remaining = check_interval
-		current_knock = KnockType.NONE
+		clear_encounter()
 		return
 
 	# For now, stop creating new knock encounters after a breach
@@ -83,6 +101,7 @@ func _process(delta: float) -> void:
 
 	# Deal with an active knock encounter first
 	if current_knock != KnockType.NONE:
+		update_knock_sounds(delta)
 		response_time_remaining -= delta
 
 		if response_time_remaining <= 0.0:
@@ -175,6 +194,8 @@ func breach() -> void:
 
 
 func clear_encounter() -> void:
+	knock_times = []
+	next_knock = 0
 	current_knock = KnockType.NONE
 	current_door = null
 	response_time_remaining = 0.0

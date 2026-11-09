@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://1ycylqagi16t" path="res://scenes/BatteryPickup.tscn" id="7_ptc3g"]
 [ext_resource type="PackedScene" uid="uid://cfhh01j2l0my4" path="res://scenes/door.tscn" id="8_wcu0q"]
 [ext_resource type="PackedScene" uid="uid://dqrr34ttpmm7r" path="res://scenes/wallPhone.tscn" id="10_mhx8p"]
+[ext_resource type="Script" uid="uid://dphgk6cahn8ty" path="res://scripts/hud.gd" id="11_hud"]
+[ext_resource type="Script" uid="uid://c57f68wip5dqh" path="res://scripts/sound_cues.gd" id="12_sound"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
 size = Vector2(78, 82)
@@ -37,7 +39,6 @@ position = Vector2(576, 324)
 script = ExtResource("2_se78b")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1003012762]
-visible = false
 color = Color(0.05882353, 0, 0.05882353, 1)
 
 [node name="NightManager" type="Node" parent="." unique_id=1596214572 node_paths=PackedStringArray("player", "enemy")]
@@ -339,5 +340,20 @@ position = Vector2(773, 153)
 
 [node name="BackRoom" type="Marker2D" parent="RoamPoints" unique_id=787752028]
 position = Vector2(1813, 970)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=639964212]
+script = ExtResource("11_hud")
+
+[node name="Status" type="Label" parent="HUD" unique_id=588043000]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 800.0
+offset_bottom = 72.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+
+[node name="SoundCues" type="Node" parent="." unique_id=1127008394]
+script = ExtResource("12_sound")
 
 [connection signal="body_entered" from="enemy/AttackArea" to="enemy" method="_on_attack_area_body_entered"]
