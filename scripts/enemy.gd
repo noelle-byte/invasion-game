@@ -44,7 +44,15 @@ enum BehaviourState {
 
 var behaviour_state := BehaviourState.ROAM
 var last_known_position := Vector2.ZERO
+var reached_last_known_position := false
 var sees_player := false
+
+@onready var roam_points: Node2D = $"../RoamPoints"
+@export var roam_pause: float = 1.0
+var roam_destination: Marker2D
+var roam_wait_remaining: float = 0.0
+# Invalidates a pending breach when the night ends.
+var activation_id: int = 0
 
 func _ready() -> void:
 	speed = base_speed
@@ -55,13 +63,18 @@ func _ready() -> void:
 	await get_tree().physics_frame
 
 func set_active(value: bool) -> void:
+	activation_id += 1
 	can_move = value
 	visible = value
 
 	if not value:
 		can_attack = false
+		stun_time_remaining = 0.0
+		roam_destination = null
+		roam_wait_remaining = 0.0
 		aggression = 0.0
 		behaviour_state = BehaviourState.ROAM
+		reached_last_known_position = false
 		last_known_position = Vector2.ZERO
 		sees_player = false
 
@@ -84,11 +97,11 @@ func update_awareness(delta: float) -> void:
 	if sees_player:
 		aggression += sight_aggression_rate * delta
 		last_known_position = target.global_position
+		reached_last_known_position = false
 
 	# Running is noisy even through walls
 	if hears_running:
 		aggression += running_aggression_rate * delta
-		last_known_position = target.global_position
 
 	# Calm down if neither sense is currently detecting the player
 	if not sees_player and not hears_running:
@@ -99,7 +112,7 @@ func update_awareness(delta: float) -> void:
 	update_behaviour_state()
 
 func can_see_player() -> bool:
-	sight_ray.target_position = to_local(target.global_position)
+	sight_ray.target_position = sight_ray.to_local(target.global_position)
 	sight_ray.force_raycast_update()
 
 	if not sight_ray.is_colliding():
@@ -127,13 +140,17 @@ func update_behaviour_state() -> void:
 				behaviour_state = BehaviourState.HUNT
 				print("Enemy lost the player")
 
-func update_navigation_target() -> void:
+func update_navigation_target(delta: float) -> void:
 	match behaviour_state:
 		BehaviourState.ROAM:
-			return
+			update_roaming(delta)
 
 		BehaviourState.HUNT:
-			navigation_agent.target_position = last_known_position
+			if not reached_last_known_position and global_position.distance_to(last_known_position) > 30.0:
+				navigation_agent.target_position = last_known_position
+			else:
+				reached_last_known_position = true
+				update_roaming(delta)
 
 		BehaviourState.CHASE:
 			if sees_player:
@@ -141,21 +158,43 @@ func update_navigation_target() -> void:
 			else:
 				navigation_agent.target_position = last_known_position
 
+# Search the placed room markers once the last sighting has been reached.
+func update_roaming(delta: float) -> void:
+	if roam_destination != null:
+		if global_position.distance_to(roam_destination.global_position) > 30.0:
+			navigation_agent.target_position = roam_destination.global_position
+			return
+		roam_destination = null
+		roam_wait_remaining = roam_pause
+	roam_wait_remaining = maxf(0.0, roam_wait_remaining - delta)
+	if roam_wait_remaining > 0.0:
+		navigation_agent.target_position = global_position
+		return
+	var choices: Array[Marker2D] = []
+	for point in roam_points.get_children():
+		if point is Marker2D and global_position.distance_to(point.global_position) > 30.0:
+			choices.append(point)
+	if not choices.is_empty():
+		roam_destination = choices.pick_random()
+		navigation_agent.target_position = roam_destination.global_position
+
 func breach_at(spawn_position: Vector2) -> void:
 	global_position = spawn_position
 	set_active(true)
+	var breach_id := activation_id
 
 	can_move = false
 	can_attack = false
 
 	# The creature knows roughly where the player was when it entered
 	last_known_position = target.global_position
+	reached_last_known_position = false
 
 	print("Enemy entered the house")
 
 	await get_tree().create_timer(breach_grace_period).timeout
 
-	if not visible:
+	if not visible or breach_id != activation_id:
 		return
 
 	aggression = 35.0
@@ -180,17 +219,13 @@ func _physics_process(delta: float) -> void:
 	if stun_time_remaining > 0.0:
 		stun_time_remaining -= delta
 		stun_time_remaining = max(stun_time_remaining, 0.0)
+		if stun_time_remaining <= 0.0:
+			try_attack_player()
 		velocity = Vector2.ZERO
 		return
 	
 	update_awareness(delta)
-	update_navigation_target()
-
-
-
-	if behaviour_state == BehaviourState.ROAM:
-		velocity = Vector2.ZERO
-		return
+	update_navigation_target(delta)
 
 	if navigation_agent.is_navigation_finished():
 		velocity = Vector2.ZERO
@@ -203,11 +238,11 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _on_attack_area_body_entered(body: Node2D) -> void:
-	if can_attack and body == target:
+	if can_attack and stun_time_remaining <= 0.0 and body == target:
 		target.die()
 
 func try_attack_player() -> void:
-	if not can_attack:
+	if not can_attack or stun_time_remaining > 0.0:
 		return
 
 	for body in attack_area.get_overlapping_bodies():
@@ -216,6 +251,8 @@ func try_attack_player() -> void:
 			return
 
 func receive_flash() -> void:
+	if not visible:
+		return
 	stun_time_remaining = max(
 		stun_time_remaining,
 		flash_stun_duration
