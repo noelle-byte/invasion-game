@@ -33,7 +33,7 @@ enum KnockType {
 @export var check_interval: float = 5.0
 
 # How long the player has to respond
-@export var response_window: float = 8.0
+@export var response_window: float = 12.0
 
 # Hours after midnight when false knocks become possible
 # Night 1 = 3AM

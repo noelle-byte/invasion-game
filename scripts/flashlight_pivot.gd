@@ -6,7 +6,7 @@ signal battery_changed(current_battery: float, max_battery: float)
 @export var max_battery: float = 100.0
 
 # Amount of battery consumed each second
-@export var battery_drain_rate: float = 3.0
+@export var battery_drain_rate: float = 3.5
 
 # Used later to increase battery drain on harder nights
 @export var drain_increase_per_night: float = 0.5

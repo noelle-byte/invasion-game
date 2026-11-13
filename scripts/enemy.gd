@@ -6,8 +6,8 @@ extends CharacterBody2D
 @onready var attack_area: Area2D = $AttackArea
 
 # How quickly the creature can move through the house
-@export var base_speed: float = 340.0
-@export var speed_increase_per_night: float = 15.0
+@export var base_speed: float = 260.0
+@export var speed_increase_per_night: float = 10.0 #adds night num -1 times
 
 var speed: float
 var can_move := true

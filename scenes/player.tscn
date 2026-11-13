@@ -5,14 +5,13 @@
 [ext_resource type="Script" uid="uid://c33j5atltlhqs" path="res://scripts/flashlight_pivot.gd" id="3_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://2wn6y82luoep" path="res://assets/bitmap.png" id="4_dqkch"]
 [ext_resource type="Texture2D" uid="uid://cnduomlcgtap8" path="res://assets/circle light.svg" id="5_qlg0r"]
-
-[ext_resource type="Script" path="res://scripts/sound_ring.gd" id="6_ring"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ring"]
-light_mode = 1
+[ext_resource type="Script" uid="uid://dvycbfuay8bh" path="res://scripts/sound_ring.gd" id="6_ring"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vesw4"]
 size = Vector2(74, 74)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ring"]
+light_mode = 1
 
 [node name="Player" type="CharacterBody2D" unique_id=1590016079]
 script = ExtResource("1_g2els")
@@ -42,7 +41,6 @@ texture = ExtResource("5_qlg0r")
 
 [node name="FlashRay" type="RayCast2D" parent="FlashlightPivot" unique_id=1621465171]
 
-
-[node name="SoundRing" type="Node2D" parent="."]
-script = ExtResource("6_ring")
+[node name="SoundRing" type="Node2D" parent="." unique_id=1627964200]
 material = SubResource("CanvasItemMaterial_ring")
+script = ExtResource("6_ring")

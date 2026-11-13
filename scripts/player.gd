@@ -3,11 +3,11 @@ extends CharacterBody2D
 
 signal stamina_changed(current_stamina: float, max_stamina: float)
 
-@export var walk_speed: float = 300.0
-@export var run_speed: float = 450.0
+@export var walk_speed: float = 230.0
+@export var run_speed: float = 310.0
 
 @export var max_stamina: float = 100.0
-@export var stamina_drain_rate: float = 30.0
+@export var stamina_drain_rate: float = 25.0
 @export var stamina_recovery_rate: float = 20.0
 @export var stamina_resume_threshold: float = 25.0
 
