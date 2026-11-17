@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dqrr34ttpmm7r" path="res://scenes/wallPhone.tscn" id="10_mhx8p"]
 [ext_resource type="Script" uid="uid://dphgk6cahn8ty" path="res://scripts/hud.gd" id="11_hud"]
 [ext_resource type="Script" uid="uid://c57f68wip5dqh" path="res://scripts/sound_cues.gd" id="12_sound"]
+[ext_resource type="Script" uid="uid://bdrxqxkb01nhs" path="res://scripts/debug_overlay.gd" id="13_debug"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
 size = Vector2(78, 82)
@@ -356,5 +357,8 @@ theme_override_constants/shadow_offset_y = 2
 
 [node name="SoundCues" type="Node" parent="." unique_id=1127008394]
 script = ExtResource("12_sound")
+
+[node name="DebugOverlay" type="Node2D" parent="." unique_id=1105761136]
+script = ExtResource("13_debug")
 
 [connection signal="body_entered" from="enemy/AttackArea" to="enemy" method="_on_attack_area_body_entered"]

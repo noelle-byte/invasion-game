@@ -11,12 +11,18 @@ config_version=5
 [application]
 
 config/name="invasion game"
-run/main_scene="uid://23g0b5i2wj3a"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://assets/icon.svg"
 
+[autoload]
+
+GameSettings="*res://scripts/game_settings.gd"
+
 [display]
 
+window/size/viewport_width=1152
+window/size/viewport_height=648
 window/stretch/mode="canvas_items"
 
 [input]

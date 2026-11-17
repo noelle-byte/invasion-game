@@ -69,7 +69,9 @@ func _process(delta: float) -> void:
 	drawing.queue_redraw()
 
 func draw_ring() -> void:
-	for section in range(8):
+	if not GameSettings.sound_indicators:
+		return
+	for section in range(8) if GameSettings.ring_outline else range(0):
 		var angle: float = section * PI / 4.0
 		drawing.draw_arc(Vector2.ZERO, radius, angle - 0.30, angle + 0.30, 16, Color(0.8, 0.85, 0.9, 0.18), 2.0, true)
 	for pulse in pulses:

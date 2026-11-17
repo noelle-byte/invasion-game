@@ -22,7 +22,10 @@ var can_move := true
 @export var flash_stun_duration: float = 1.5
 @export var flash_aggression_reduction: float = 25.0
 
+signal flashed
+
 var stun_time_remaining: float = 0.0
+var breach_time_remaining: float = 0.0
 
 var can_attack := false
 
@@ -75,6 +78,7 @@ func set_active(value: bool) -> void:
 	if not value:
 		can_attack = false
 		stun_time_remaining = 0.0
+		breach_time_remaining = 0.0
 		distance_since_step = 0.0
 		roam_destination = null
 		roam_wait_remaining = 0.0
@@ -192,6 +196,7 @@ func breach_at(spawn_position: Vector2) -> void:
 
 	can_move = false
 	can_attack = false
+	breach_time_remaining = breach_grace_period
 
 	# The creature knows roughly where the player was when it entered
 	last_known_position = target.global_position
@@ -199,11 +204,12 @@ func breach_at(spawn_position: Vector2) -> void:
 
 	print("Enemy entered the house")
 
-	await get_tree().create_timer(breach_grace_period).timeout
+	await get_tree().create_timer(breach_grace_period, false).timeout
 
 	if not visible or breach_id != activation_id:
 		return
 
+	breach_time_remaining = 0.0
 	aggression = 35.0
 	behaviour_state = BehaviourState.HUNT
 
@@ -219,6 +225,7 @@ func set_difficulty(night: int) -> void:
 	print("Enemy speed: ", speed)
 
 func _physics_process(delta: float) -> void:
+	breach_time_remaining = maxf(0.0, breach_time_remaining - delta)
 	if not can_move:
 		velocity = Vector2.ZERO
 		return
@@ -279,4 +286,5 @@ func receive_flash() -> void:
 
 	velocity = Vector2.ZERO
 
+	flashed.emit()
 	print("Enemy flashed - aggression: ", aggression)

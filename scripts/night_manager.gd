@@ -19,6 +19,8 @@ var game_running := false
 
 
 func _ready() -> void:
+	current_night = GameSettings.starting_night
+	flashlight.set_difficulty(current_night)
 	prepare_night.call_deferred()
 
 
@@ -50,7 +52,7 @@ func prepare_night() -> void:
 
 
 func start_night() -> void:
-	if game_running:
+	if game_running or player.is_dead:
 		return
 
 	game_running = true

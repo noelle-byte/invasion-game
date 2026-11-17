@@ -1,5 +1,7 @@
 extends Node2D
 
+signal flash_denied
+
 signal battery_changed(current_battery: float, max_battery: float)
 
 # Maximum amount of flashlight charge
@@ -88,6 +90,7 @@ func attempt_flash() -> void:
 	var flash_cost: float = 10.0 + (3.0 * current_night)
 
 	if battery < flash_cost:
+		flash_denied.emit()
 		print("Not enough battery to flash")
 		return
 
@@ -105,7 +108,7 @@ func attempt_flash() -> void:
 		if enemy is Node2D and enemy.has_method("receive_flash") and enemy_in_flash(enemy):
 			enemy.receive_flash()
 
-	await get_tree().create_timer(flash_visual_duration).timeout
+	await get_tree().create_timer(flash_visual_duration, false).timeout
 
 	if battery <= 0.0:
 		flashlight_on = false

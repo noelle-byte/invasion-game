@@ -32,3 +32,19 @@ one event for later audio integration; no audio assets are currently played.
 Manual checks: distinguish both knock rhythms, check cues in all rooms and
 against dark backgrounds, and walk between opposite doors with empty stamina
 to tune the new eight-second response window. Aggression now decays at 9/sec.
+
+Menu, pause, retry, completion and debug regression checks:
+
+```sh
+godot --headless --path . --script tests/menu_flow.gd
+```
+
+Run the project (F6 on the house bypasses the main menu; F5 uses it). Escape
+pauses; F3 toggles diagnostics in debug builds. Settings persist under user://.
+Retry Night reloads the house with that night selected, fresh battery/stamina,
+all pickups, and a new phone call. Restart Game starts at Night 1. Retry does
+not restore a mid-night checkpoint or preserve spent resources.
+
+Check menus with mouse and keyboard, resource bars at your window size,
+insufficient-charge feedback, the paused settings screen, and F3 paths/radii
+across room camera transitions. Debug tools are unavailable in release builds.

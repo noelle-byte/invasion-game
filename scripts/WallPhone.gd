@@ -48,7 +48,7 @@ func answer_phone() -> void:
 			+ "Call you back tomorrow."
 		)
 
-	await get_tree().create_timer(call_duration).timeout
+	await get_tree().create_timer(call_duration, false).timeout
 
 	call_playing = false
 

@@ -1,6 +1,8 @@
 class_name PlayerCharacter
 extends CharacterBody2D
 
+signal died
+
 signal stamina_changed(current_stamina: float, max_stamina: float)
 
 @export var walk_speed: float = 230.0
@@ -26,6 +28,7 @@ func die() -> void:
 	can_move = false
 	velocity = Vector2.ZERO
 	
+	died.emit()
 	print("player died")
 
 func _physics_process(delta: float) -> void:
