@@ -74,7 +74,7 @@ func log_event(message: String) -> void:
 		history.pop_front()
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if OS.is_debug_build() and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F3:
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_O:
 		enabled = not enabled
 		panel.visible = enabled
 		frame.visible = enabled
