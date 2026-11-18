@@ -42,10 +42,9 @@ enum BehaviourState {
 
 @export_range(0.0, 100.0) var aggression: float = 0.0
 
-@export var sight_aggression_rate: float = 30.0
-@export var running_aggression_rate: float = 18.0
-@export var aggression_decay_rate: float = 9.0
-
+@export var sight_aggression_rate: float = 40.0
+@export var running_aggression_rate: float = 22.0
+@export var aggression_decay_rate: float = 8.5
 @export var running_hearing_radius: float = 550.0
 
 @onready var sight_ray: RayCast2D = $SightRay
