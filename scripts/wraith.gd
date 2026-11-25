@@ -3,7 +3,9 @@ extends CharacterBody2D
 # Unlike the Knocker, the Wraith always knows where the player is. It moves
 # directly, without collision movement or a navigation path, so walls cannot stop it.
 @export var target: PlayerCharacter
-@export var speed: float = 100.0
+# The first active night starts at 55% of walking speed.
+@export_range(0.0, 1.0) var night_two_speed_fraction: float = 0.55
+var speed: float = 0.0
 @export var spawn_grace: float = 3.0
 @export var flash_disable_duration: float = 6.0
 @export var repel_distance: float = 250.0
@@ -25,6 +27,11 @@ func set_active(value: bool) -> void:
 	# The body can be hit by the flash ray, but never blocks movement.
 	$CollisionShape2D.set_deferred("disabled", not value)
 
+func set_difficulty(night: int) -> void:
+	# Interpolate over Nights 2–5; Night 5 matches the player’s walk speed.
+	var progress := clampf((night - 2) / 3.0, 0.0, 1.0)
+	speed = target.walk_speed * lerpf(night_two_speed_fraction, 1.0, progress)
+
 func _physics_process(delta: float) -> void:
 	if not active or target == null or target.is_dead:
 		return
@@ -40,7 +47,7 @@ func _physics_process(delta: float) -> void:
 		target.die()
 		return
 	# Clamp the step so a large frame cannot skip past the player.
-	global_position = global_position.move_toward(target.global_position, speed * delta)
+	global_position = global_position.move_toward(target.global_position, minf(speed, target.walk_speed) * delta)
 	if global_position.distance_to(target.global_position) <= attack_distance:
 		target.die()
 
