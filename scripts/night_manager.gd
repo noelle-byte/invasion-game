@@ -42,6 +42,12 @@ func _process(delta: float) -> void:
 		advance_night()
 
 
+# Apply the penalty once, without changing the exported base values.
+func set_music_box_penalty(enabled: bool) -> void:
+	enemy.music_box_penalty = enabled
+	wraith.music_box_penalty = enabled
+	get_node("../KnockManager").music_box_penalty = enabled
+
 func prepare_night() -> void:
 	game_running = false
 
@@ -85,6 +91,7 @@ func advance_night() -> void:
 
 	if current_night > total_nights:
 		game_running = false
+		set_music_box_penalty(false)
 		enemy.set_active(false)
 		wraith.set_active(false)
 

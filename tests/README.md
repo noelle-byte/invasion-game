@@ -48,3 +48,16 @@ not restore a mid-night checkpoint or preserve spent resources.
 Check menus with mouse and keyboard, resource bars at your window size,
 insufficient-charge feedback, the paused settings screen, and F3 paths/radii
 across room camera transitions. Debug tools are unavailable in release builds.
+
+Music box checks:
+
+```sh
+godot --headless --path . --script tests/music_box.gd
+```
+
+The box drains over 45 seconds during a night and can be wound by holding E
+near it. Once empty, its penalty lasts until the next phone-gated night:
+Knocker speed +15%, aggression gain +30%, running hearing range +40%, and
+knock opportunity and response timers run 25% faster. The Wraith gains up to
+15% speed, capped at player walking speed. Its direct tracking has no aggression
+or hearing range to increase. Playtest the timing and HUD placement in-game.
