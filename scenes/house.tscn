@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://c57f68wip5dqh" path="res://scripts/sound_cues.gd" id="12_sound"]
 [ext_resource type="Script" uid="uid://bdrxqxkb01nhs" path="res://scripts/debug_overlay.gd" id="13_debug"]
 [ext_resource type="PackedScene" path="res://scenes/wraith.tscn" id="14_wraith"]
-
 [ext_resource type="PackedScene" path="res://scenes/music_box.tscn" id="15_music_box"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_se78b"]
@@ -43,6 +42,7 @@ position = Vector2(576, 324)
 script = ExtResource("2_se78b")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1003012762]
+visible = false
 color = Color(0.05882353, 0, 0.05882353, 1)
 
 [node name="NightManager" type="Node" parent="." unique_id=1596214572 node_paths=PackedStringArray("player", "enemy", "wraith", "wraith_spawn_points")]
@@ -295,8 +295,8 @@ scale = Vector2(5, 5)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy/AttackArea" unique_id=720221037]
 shape = SubResource("RectangleShape2D_vesw4")
 
-[node name="MusicBox" parent="." instance=ExtResource("15_music_box")]
-position = Vector2(1350, 550)
+[node name="MusicBox" parent="." unique_id=1480164836 instance=ExtResource("15_music_box")]
+position = Vector2(2142, 552)
 
 [node name="Wraith" parent="." unique_id=1554852749 node_paths=PackedStringArray("target") instance=ExtResource("14_wraith")]
 target = NodePath("../Player")
