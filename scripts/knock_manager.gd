@@ -29,6 +29,9 @@ enum KnockType {
 # AI becomes more active each night
 @export var ai_increase_per_night: int = 3
 
+# A silent music box makes successful knock rolls more likely.
+@export var music_box_ai_bonus: int = 4
+
 # How often the AI gets a chance to attempt a knock
 @export var check_interval: float = 5.0
 
@@ -135,12 +138,16 @@ func _on_night_changed(night: int) -> void:
 	print("False knocks allowed after: ", false_start_hour, " AM")
 
 
+func get_effective_ai_level() -> int:
+	return mini(ai_level + (music_box_ai_bonus if music_box_penalty else 0), 20)
+
 func attempt_knock() -> void:
+	var effective_ai := get_effective_ai_level()
 	var roll := randi_range(1, 20)
 
-	print("Knock roll: ", roll, " / AI ", ai_level)
+	print("Knock roll: ", roll, " / AI ", effective_ai)
 
-	if roll > ai_level:
+	if roll > effective_ai:
 		return
 
 	var can_false: bool = (
