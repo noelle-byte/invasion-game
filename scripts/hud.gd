@@ -8,6 +8,8 @@ var night_label: Label
 var clock: Label
 var stamina_bar: ProgressBar
 var battery_bar: ProgressBar
+var music_label: Label
+var music_bar: ProgressBar
 var menu: Control
 var ended: bool = false
 var denied_time: float = 0.0
@@ -23,7 +25,7 @@ func _ready() -> void:
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var top_left := column(root, Vector2(20, 10), false, false)
 	clock = label(top_left, 44)
-	var bottom_left := column(root, Vector2(20, -150), false, true)
+	var bottom_left := column(root, Vector2(20, -215), false, true)
 	bottom_left.custom_minimum_size.x = 360
 	bottom_left.add_theme_constant_override("separation", 8)
 	night_label = label(bottom_left, 26)
@@ -31,6 +33,8 @@ func _ready() -> void:
 	stamina_bar.tooltip_text = "Stamina · Hold Shift to sprint"
 	battery_bar = bar(bottom_left, Color(1.0, 0.8, 0.0))
 	battery_bar.tooltip_text = "Flashlight battery · Space to toggle · F to flash"
+	music_label = label(bottom_left, 20)
+	music_bar = bar(bottom_left, Color(0.75, 0.4, 0.8))
 	var menu_layer := CanvasLayer.new()
 	menu_layer.layer = 10
 	add_child(menu_layer)
@@ -121,6 +125,10 @@ func _process(delta: float) -> void:
 		objective = "Not enough battery to flash"
 	night_label.text = objective
 	night_label.modulate = Color.SALMON if denied_time > 0.0 else Color.WHITE
+	var box = get_node("../MusicBox")
+	music_label.text = "Music box empty — enemies empowered" if box.expired else ("Hold E to wind music box" if box.player_nearby and night_manager.game_running else "Music box")
+	music_label.modulate = Color.SALMON if box.expired else Color.WHITE
+	music_bar.value = 100.0 * box.remaining / box.capacity
 	stamina_bar.value = 100.0 * player.stamina / player.max_stamina
 	battery_bar.value = 100.0 * flashlight.battery / flashlight.max_battery
 	stamina_bar.modulate = Color(0.65, 0.65, 0.8) if player.exhausted else Color.WHITE

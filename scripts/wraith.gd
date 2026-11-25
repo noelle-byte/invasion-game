@@ -11,6 +11,7 @@ var speed: float = 0.0
 @export var repel_distance: float = 250.0
 @export var attack_distance: float = 45.0
 
+var music_box_penalty := false
 var active := false
 var grace_remaining := 0.0
 var disable_remaining := 0.0
@@ -47,7 +48,7 @@ func _physics_process(delta: float) -> void:
 		target.die()
 		return
 	# Clamp the step so a large frame cannot skip past the player.
-	global_position = global_position.move_toward(target.global_position, minf(speed, target.walk_speed) * delta)
+	global_position = global_position.move_toward(target.global_position, minf(speed * (1.15 if music_box_penalty else 1.0), target.walk_speed) * delta)
 	if global_position.distance_to(target.global_position) <= attack_distance:
 		target.die()
 

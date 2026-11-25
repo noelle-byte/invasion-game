@@ -49,6 +49,7 @@ enum KnockType {
 	0.0
 ]
 
+var music_box_penalty := false
 var ai_level: int
 var false_start_hour: float
 
@@ -102,7 +103,7 @@ func _process(delta: float) -> void:
 	# Deal with an active knock encounter first
 	if current_knock != KnockType.NONE:
 		update_knock_sounds(delta)
-		response_time_remaining -= delta
+		response_time_remaining -= delta * (1.25 if music_box_penalty else 1.0)
 
 		if response_time_remaining <= 0.0:
 			_resolve_timeout()
@@ -110,7 +111,7 @@ func _process(delta: float) -> void:
 		return
 
 	# No current encounter, so count down to the next AI opportunity
-	check_time_remaining -= delta
+	check_time_remaining -= delta * (1.25 if music_box_penalty else 1.0)
 
 	if check_time_remaining <= 0.0:
 		check_time_remaining = check_interval

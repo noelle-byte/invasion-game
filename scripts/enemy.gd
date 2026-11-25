@@ -10,6 +10,7 @@ extends CharacterBody2D
 @export var speed_increase_per_night: float = 10.0 #adds night num -1 times
 
 var speed: float
+var music_box_penalty := false
 var can_move := true
 
 @export var target: PlayerCharacter
@@ -99,18 +100,18 @@ func update_awareness(delta: float) -> void:
 
 	var hears_running := (
 		target.is_running
-		and distance_to_player <= running_hearing_radius
+		and distance_to_player <= running_hearing_radius * (1.4 if music_box_penalty else 1.0)
 	)
 
 	# Seeing the player strongly increases aggression
 	if sees_player:
-		aggression += sight_aggression_rate * delta
+		aggression += sight_aggression_rate * (1.3 if music_box_penalty else 1.0) * delta
 		last_known_position = target.global_position
 		reached_last_known_position = false
 
 	# Running is noisy even through walls
 	if hears_running:
-		aggression += running_aggression_rate * delta
+		aggression += running_aggression_rate * (1.3 if music_box_penalty else 1.0) * delta
 
 	# Calm down if neither sense is currently detecting the player
 	if not sees_player and not hears_running:
@@ -247,7 +248,7 @@ func _physics_process(delta: float) -> void:
 	var next_position := navigation_agent.get_next_path_position()
 	var direction := global_position.direction_to(next_position)
 
-	velocity = direction * speed
+	velocity = direction * speed * (1.15 if music_box_penalty else 1.0)
 	var previous_position: Vector2 = global_position
 	move_and_slide()
 	distance_since_step += previous_position.distance_to(global_position)
