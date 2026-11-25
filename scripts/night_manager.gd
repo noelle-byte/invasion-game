@@ -10,6 +10,8 @@ signal game_completed
 
 @export var player: CharacterBody2D
 @export var enemy: CharacterBody2D
+@export var wraith: CharacterBody2D
+@export var wraith_spawn_points: Node2D
 
 @onready var flashlight = $"../Player/FlashlightPivot"
 
@@ -45,6 +47,7 @@ func prepare_night() -> void:
 
 	# Safe period before answering the phone
 	enemy.set_active(false)
+	wraith.set_active(false)
 
 	waiting_for_call.emit(current_night)
 
@@ -61,6 +64,16 @@ func start_night() -> void:
 	enemy.set_difficulty(current_night)
 	flashlight.set_difficulty(current_night)
 
+	if current_night >= 2 and current_night <= total_nights:
+		# Spawn at the furthest marker and give the player time to react.
+		var furthest: Marker2D = null
+		for point in wraith_spawn_points.get_children():
+			if point is Marker2D and (furthest == null or point.global_position.distance_squared_to(player.global_position) > furthest.global_position.distance_squared_to(player.global_position)):
+				furthest = point
+		if furthest != null:
+			wraith.global_position = furthest.global_position
+			wraith.set_active(true)
+
 	night_changed.emit(current_night)
 
 	print("Night ", current_night, " started")
@@ -72,6 +85,7 @@ func advance_night() -> void:
 	if current_night > total_nights:
 		game_running = false
 		enemy.set_active(false)
+		wraith.set_active(false)
 
 		print("All nights completed")
 		game_completed.emit()
