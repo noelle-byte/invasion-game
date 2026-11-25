@@ -1,8 +1,9 @@
 extends Area2D
 
-# A full box lasts 45 seconds. Holding interact fills it in about 9 seconds.
+# Charge is measured in Night 1 seconds; later nights drain it faster.
 @export var capacity: float = 45.0
 @export var wind_rate: float = 6.0
+@export var drain_increase_per_night: float = 0.15
 @onready var player: PlayerCharacter = $"../Player"
 @onready var night_manager: Node = $"../NightManager"
 
@@ -24,10 +25,11 @@ func _reset_for_night(_night: int) -> void:
 func _process(delta: float) -> void:
 	if not night_manager.game_running or player.is_dead or expired:
 		return
+	var drain_rate := 1.0 + maxf(0.0, night_manager.current_night - 1) * drain_increase_per_night
 	if player_nearby and Input.is_action_pressed("interact"):
-		remaining = minf(capacity, remaining + (wind_rate - 1.0) * delta)
+		remaining = clampf(remaining + (wind_rate - drain_rate) * delta, 0.0, capacity)
 	else:
-		remaining = maxf(0.0, remaining - delta)
+		remaining = maxf(0.0, remaining - drain_rate * delta)
 	if remaining <= 0.0:
 		expired = true
 		night_manager.set_music_box_penalty(true)

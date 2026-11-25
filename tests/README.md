@@ -55,9 +55,10 @@ Music box checks:
 godot --headless --path . --script tests/music_box.gd
 ```
 
-The box drains over 45 seconds during a night and can be wound by holding E
+The box drains over 45 seconds on Night 1, accelerating by 15% of the
+Night 1 rate per later night and can be wound by holding E
 near it. Once empty, its penalty lasts until the next phone-gated night:
-Knocker speed +15%, aggression gain +30%, running hearing range +40%, and
+Knocker AI +4 (capped at 20), speed +15%, aggression gain +30%, running hearing range +40%, and
 knock opportunity and response timers run 25% faster. The Wraith gains up to
 15% speed, capped at player walking speed. Its direct tracking has no aggression
 or hearing range to increase. Playtest the timing and HUD placement in-game.
