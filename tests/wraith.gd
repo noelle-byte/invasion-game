@@ -33,8 +33,8 @@ func run() -> void:
 	ghost.grace_remaining = 0.0
 	player.global_position = Vector2(1250, 100)
 	ghost.global_position = Vector2(1000, 100)
-	ghost._physics_process(2.0)
-	check(is_equal_approx(ghost.global_position.x, 1200.0) and ghost.speed < player.walk_speed, "Wraith moves through wall slower than walking")
+	ghost._physics_process(1.5)
+	check(ghost.global_position.x > 1150.0 and ghost.speed < player.walk_speed, "Wraith moves through wall slower than walking")
 	player.global_position = Vector2(600, 320)
 	ghost.global_position = Vector2(900, 320)
 	light.global_rotation = 0.0
@@ -51,9 +51,14 @@ func run() -> void:
 	check(ghost.global_position.x < held.x, "Wraith resumes pursuit")
 	night.advance_night()
 	check(not ghost.active and not ghost.visible, "Night transition deactivates Wraith")
+	var previous_speed: float = ghost.speed
 	for n in range(3, 6):
 		night.start_night()
 		check(ghost.active, "Wraith active on Night %d" % n)
+		check(ghost.speed > previous_speed and ghost.speed <= player.walk_speed, "Wraith speed increases within walking speed on Night %d" % n)
+		previous_speed = ghost.speed
+		if n == 5:
+			check(is_equal_approx(ghost.speed, player.walk_speed), "Night 5 matches walking speed")
 		night.advance_night()
 	check(not ghost.active and not night.game_running, "Completion deactivates Wraith")
 	house.queue_free()

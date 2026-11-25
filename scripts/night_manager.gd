@@ -65,6 +65,7 @@ func start_night() -> void:
 	flashlight.set_difficulty(current_night)
 
 	if current_night >= 2 and current_night <= total_nights:
+		wraith.set_difficulty(current_night)
 		# Spawn at the furthest marker and give the player time to react.
 		var furthest: Marker2D = null
 		for point in wraith_spawn_points.get_children():
